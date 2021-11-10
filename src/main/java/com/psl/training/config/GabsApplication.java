@@ -2,8 +2,12 @@ package com.psl.training.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties
+@EntityScan(basePackages = {"com.psl.training"})
 public class GabsApplication {
 
 	public static void main(String[] args) {
