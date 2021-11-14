@@ -8,49 +8,56 @@ import org.springframework.stereotype.Service;
 
 
 import com.psl.training.entity.AppointmentCalendar;
+import com.psl.training.entity.User;
 import com.psl.training.repository.AppointmentCalendarRepository;
+import com.psl.training.repository.UserRepository;
 
 @Service
 public class AppointmentCalendarService {
 
 	@Autowired
-	AppointmentCalendarRepository repository;
+	AppointmentCalendarRepository repositoryAC;
+	
+	@Autowired
+	UserRepository repositoryU;
 	
 	public void insertAppointmentCalendar(AppointmentCalendar object)
 	{
-		repository.save(object);
+		repositoryAC.save(object);
 	}
 	
 	public void updateAppointmentCalendar(AppointmentCalendar object)
 	{
-		repository.save(object);
+		repositoryAC.save(object);
 	}
 	
 	public void deleteAppointmentCalendarById(long acID)
 	{
-		repository.deleteById(acID);
+		repositoryAC.deleteById(acID);
 	}
 	
 	public AppointmentCalendar getAppointmentCalendarById(long acID)
 	{
 		//return new object which is not found
-		return repository.findById(acID).orElseThrow(IllegalArgumentException::new);
+		return repositoryAC.findById(acID).orElseThrow(IllegalArgumentException::new);
 	}
 	
-	public List<AppointmentCalendar> getAppointmentCalendarByUserName (String userName ) {
-		return repository.findByuserName(userName);
+	public List<AppointmentCalendar> getAppointmentCalendarByUserID(long UserID ) {
+		User owner = repositoryU.getById(UserID);
+		return repositoryAC.findByOwner(owner);
 	}
 	
 	public List<AppointmentCalendar> getAppointmentCalendarByType (String type ) {
-		return repository.findByType(type);
+		return repositoryAC.findByType(type);
 	}
 	
 	public List<AppointmentCalendar> getAppointmentCalendarByLocation (String location ) {
-		return repository.findByLocation(location);
+		return repositoryAC.findByLocation(location);
 	}
 	
-	public List<AppointmentCalendar> getAppointmentCalendarByUserID (long userId ) {
-		return repository.findByUserID(userId);
+	public List<AppointmentCalendar> getAppointmentCalendarByUserName (String  userName ) {
+		User owner = repositoryU.findByUserName(userName).get(0);
+		return repositoryAC.findByOwner(owner);
 	}
 	
 	
