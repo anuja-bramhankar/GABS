@@ -12,6 +12,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "AppointmentCalendars", uniqueConstraints = {@UniqueConstraint(columnNames = {"acID"})})
 public class AppointmentCalendar {
@@ -20,6 +23,7 @@ public class AppointmentCalendar {
 	@Column(nullable = false)
 	private long acID;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="userID", nullable=false, insertable=true, updatable=false)
 	private User owner;
@@ -33,6 +37,7 @@ public class AppointmentCalendar {
 	@Column(nullable = false)
 	private String description;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "appointmentCalendar")
 	private Set<AppointmentEntry> listAppointmentEntries;
 	
