@@ -1,11 +1,10 @@
 package com.psl.training.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,19 +13,16 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "AppointmentCalendars", uniqueConstraints = {@UniqueConstraint(columnNames = {"acID", "userID", "userName"})})
+@Table(name = "AppointmentCalendars", uniqueConstraints = {@UniqueConstraint(columnNames = {"acID"})})
 public class AppointmentCalendar {
 
 	@Id
 	@Column(nullable = false)
 	private long acID;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="Users.userID")
-	private long userID;
-	
-	@Column(nullable = false)
-	private String userName;
+	@ManyToOne
+	@JoinColumn(name="userID", nullable=false, insertable=true, updatable=false)
+	private User owner;
 	
 	@Column(nullable = false)
 	private String type;
@@ -37,25 +33,26 @@ public class AppointmentCalendar {
 	@Column(nullable = false)
 	private String description;
 
-	@OneToMany(mappedBy = "aeID", fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<AppointmentEntry> listAppointmentEntry = new ArrayList<AppointmentEntry>();
+	@OneToMany(mappedBy = "appointmentCalendar")
+	private Set<AppointmentEntry> listAppointmentEntries;
 	
 	
 	public AppointmentCalendar() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AppointmentCalendar(long acID, long userID, String userName, String type, String location,
-			String description, List<AppointmentEntry> listAppointmentEntry) {
+
+	public AppointmentCalendar(long acID, User owner, String type, String location, String description,
+			Set<AppointmentEntry> listAppointmentEntries) {
 		super();
 		this.acID = acID;
-		this.userID = userID;
-		this.userName = userName;
+		this.owner = owner;
 		this.type = type;
 		this.location = location;
 		this.description = description;
-		this.listAppointmentEntry = listAppointmentEntry;
+		this.listAppointmentEntries = listAppointmentEntries;
 	}
+
 
 	public long getAcID() {
 		return acID;
@@ -67,23 +64,13 @@ public class AppointmentCalendar {
 	}
 
 
-	public long getUserID() {
-		return userID;
+	public User getOwner() {
+		return owner;
 	}
 
 
-	public void setUserID(long userID) {
-		this.userID = userID;
-	}
-
-
-	public String getUserName() {
-		return userName;
-	}
-
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 
@@ -117,13 +104,15 @@ public class AppointmentCalendar {
 	}
 
 
-	public List<AppointmentEntry> getListAppointmentEntry() {
-		return listAppointmentEntry;
+	public Set<AppointmentEntry> getListAppointmentEntries() {
+		return listAppointmentEntries;
 	}
 
 
-	public void setListAppointmentEntry(List<AppointmentEntry> listAppointmentEntry) {
-		this.listAppointmentEntry = listAppointmentEntry;
+	public void setListAppointmentEntries(Set<AppointmentEntry> listAppointmentEntries) {
+		this.listAppointmentEntries = listAppointmentEntries;
 	}
+	
+	
 	
 }
