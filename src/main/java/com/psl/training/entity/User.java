@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Users", uniqueConstraints = {@UniqueConstraint(columnNames = {"userID", "userName", "mobileNumber"})})
@@ -39,10 +40,12 @@ public class User {
 		
 		@Column(nullable = false)
 		private String password; 
-		 
+		
+		@JsonManagedReference
 		@OneToMany(mappedBy = "appointee")
 		private Set<AppointmentEntry> appointmentEntries;
 		
+		@JsonManagedReference
 		@OneToMany(mappedBy = "owner")
 		private Set<AppointmentCalendar> appointmentCalendars;
 		
