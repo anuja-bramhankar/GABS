@@ -1,46 +1,136 @@
-package com.psl.training.controllers;
+package com.psl.training.entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.time.LocalDate;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import com.psl.training.entity.AppointmentCalendar;
-import com.psl.training.entity.AppointmentEntry;
-import com.psl.training.entity.User;
-import com.psl.training.service.AppointmentCalendarService;
-import com.psl.training.service.AppointmentEntryService;
-import com.psl.training.service.UserService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@RestController
-public class AppointmentEntryController {
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
-	@Autowired
-	AppointmentEntryService serviceAE;
+
+
+@Entity
+@Table(name = "AppointmentEntries", uniqueConstraints = {@UniqueConstraint(columnNames = {"aeID"})})
+public class AppointmentEntry {
 	
-	@Autowired
-	AppointmentCalendarService serviceAC;
+	@Id
+	@Column(nullable = false)
+	private long aeID;
 	
-	@Autowired
-	UserService serviceU;
+
+	@ManyToOne
+	@JoinColumn(name="acID", nullable=false)
+	private AppointmentCalendar appointmentCalendar;
 	
-	@PostMapping("/book/{appointeeID}/{acID}/createaeform")
-	public String insertAppointmentEntry(@RequestBody AppointmentEntry appointmentEntry, @PathVariable("acID") long acID, @PathVariable("appointeeID") long appointeeID)
+	@ManyToOne
+	@JoinColumn(name="owner_id", nullable=false, insertable=true, updatable=false)
+	private User owner;
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+	@Column(nullable = false)
+	private LocalDate date;
+	
+	@Column(nullable = false)
+	private Boolean isApproved;
+	
+	@Column(nullable = false)
+	private int timeSlot;
+	
+	@ManyToOne
+	@JoinColumn(name="apointee_id", nullable=false)
+	private User appointee;
+	
+	@Column(nullable = false)
+	private String description;
+
+	public AppointmentEntry()
 	{
-		AppointmentCalendar appointmentCalendar = serviceAC.getAppointmentCalendarById(acID);
-		appointmentEntry.setAppointmentCalendar(appointmentCalendar);
 		
-		User owner = serviceU.findByUserID(appointmentCalendar.getOwner().getUserID());
-		User appointee = serviceU.findByUserID(appointeeID);
-		
-		appointmentEntry.setOwner(owner);
-		appointmentEntry.setAppointee(appointee);
-		
-		
-		serviceAE.insertAppointmentEntry(appointmentEntry);
-		return "Appointment Entry Inserted";
+	}
+	
+	public AppointmentEntry(long aeID, AppointmentCalendar appointmentCalendar, User owner, LocalDate date,
+			Boolean isApproved, int timeSlot, User appointee, String description) {
+		super();
+		this.aeID = aeID;
+		this.appointmentCalendar = appointmentCalendar;
+		this.owner = owner;
+		this.date = date;
+		this.isApproved = isApproved;
+		this.timeSlot = timeSlot;
+		this.appointee = appointee;
+		this.description = description;
+	}
+
+	public long getAeID() {
+		return aeID;
+	}
+
+	public void setAeID(long aeID) {
+		this.aeID = aeID;
+	}
+
+	public AppointmentCalendar getAppointmentCalendar() {
+		return appointmentCalendar;
+	}
+
+	public void setAppointmentCalendar(AppointmentCalendar appointmentCalendar) {
+		this.appointmentCalendar = appointmentCalendar;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public Boolean getIsApproved() {
+		return isApproved;
+	}
+
+	public void setIsApproved(Boolean isApproved) {
+		this.isApproved = isApproved;
+	}
+
+	public int getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(int timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public User getAppointee() {
+		return appointee;
+	}
+
+	public void setAppointee(User appointee) {
+		this.appointee = appointee;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
+	
+
 }
