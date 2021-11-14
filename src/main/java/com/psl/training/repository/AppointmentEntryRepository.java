@@ -21,8 +21,8 @@ public interface AppointmentEntryRepository extends JpaRepository<AppointmentEnt
 	
 	public List<AppointmentEntry> findByAppointee(User apointee);
 
-	@Query(value = "select * from AppointmentEntries where owner=?1 and isApproved=?2",nativeQuery=true)
-    public List<AppointmentEntry> findSpecificAppointmentEntry(User owner, Boolean isApproved);
+	@Query(value = "select * from AppointmentEntries where acID=?1 and isApproved=?2",nativeQuery=true)
+    public List<AppointmentEntry> findSpecificAppointmentEntry(long acID, Boolean isApproved);
 	
 	
 }
