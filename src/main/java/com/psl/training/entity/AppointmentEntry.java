@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,11 +23,12 @@ public class AppointmentEntry {
 	@Column(nullable = false)
 	private long aeID;
 	
-
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="acID", nullable=false)
 	private AppointmentCalendar appointmentCalendar;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="owner_id", nullable=false, insertable=true, updatable=false)
 	private User owner;
@@ -41,6 +43,7 @@ public class AppointmentEntry {
 	@Column(nullable = false)
 	private int timeSlot;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="apointee_id", nullable=false)
 	private User appointee;
