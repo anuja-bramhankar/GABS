@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.psl.training.entity.AppointmentCalendar;
+import com.psl.training.entity.AppointmentEntry;
 import com.psl.training.entity.User;
 import com.psl.training.service.AppointmentCalendarService;
+import com.psl.training.service.AppointmentEntryService;
 import com.psl.training.service.UserService;
 
 @RestController
@@ -20,6 +22,9 @@ public class AppointmentCalendarController {
 
 	@Autowired
 	AppointmentCalendarService serviceAC;
+	
+	@Autowired
+	AppointmentEntryService serviceAE;
 	
 	@Autowired
 	UserService serviceU;
@@ -41,5 +46,7 @@ public class AppointmentCalendarController {
 		return serviceAC.getAppointmentCalendarByUserID(payload.get("userID"));
 
 	}
+	
+	
 	
 }
